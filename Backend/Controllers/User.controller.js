@@ -7,23 +7,35 @@ const UserModel = require("../Models/User.model");
 const Userregisterlogger = require("../Middlewares/Userregisterlogger");
 const Userloginlogger = require("../Middlewares/Userloginlogger");
 UserController.post("/register", Userregisterlogger, async (req, res) => {
-  const { username, email, phone, role, password } = req.body;
+  const { fname, lname, username, email, phone, role, password } = req.body;
 
+  // const user = await UserModel.findOne({ email: email, phone: phone });
+  // console.log("user:", user);
+  // if (user) {
+  //   return res.status(200).send("User Allready Exist");
+  // }
   await bcrypt.hash(password, 8, async function (err, hash) {
     if (err) {
       return res.status(500).send("Error in Password hash calculation");
     }
-    const user = new UserModel({
-      username,
-      email,
-      phone,
-      role,
-      password: hash,
-    });
-    await user.save();
-    return res
-      .status(200)
-      .send({ message: "Registration successfull", user: user });
+    try {
+      const user = new UserModel({
+        fname,
+        lname,
+        username,
+        email,
+        phone,
+        role,
+        password: hash,
+      });
+      await user.save();
+      return res
+        .status(200)
+        .send({ message: "Registration successfull", user: user });
+    } catch (err) {
+      console.log("err:", err);
+      res.status(300).send({ message: "User Allready Exist", err: err });
+    }
   });
 });
 
