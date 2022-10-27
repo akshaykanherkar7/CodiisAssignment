@@ -10,21 +10,67 @@ import {
   Stack,
   Text,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { userLoginAPI } from "../Redux/Auth/auth.action";
+import { ERROR, LOGIN_SUCC } from "../Redux/Auth/auth.actionTypes";
 
 const Login = () => {
   const [payload, setPayload] = useState({});
+  const toast = useToast();
+  const navigate = useNavigate();
+  const { userData } = useSelector((state) => state.auth);
+  console.log("userData:", userData);
   const HandleOnchange = (e) => {
     let { name, value } = e.target;
     setPayload({ ...payload, [name]: value });
   };
 
+  const dispatch = useDispatch();
+
   const handleLogin = (e) => {
     e.preventDefault();
     console.log(payload);
+    dispatch(userLoginAPI(payload)).then((res) => {
+      if (res === LOGIN_SUCC) {
+        toast({
+          title: "Login Successfull.",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        // if (userData.role === "Customer") {
+        //   console.log("Admin");
+        //   setTimeout(() => {
+        //     navigate("/admin");
+        //   }, 3000);
+        // } else {
+        //   console.log("Customer");
+        //   setTimeout(() => {
+        //     navigate("/customer");
+        //   }, 3000);
+        // }
+      }
+      if (res === ERROR) {
+        toast({
+          title: "Invalid Credentiels",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    });
   };
+  if (userData.role === "Admin") {
+    navigate("/admin");
+  } else if (userData.role === "Customer") {
+    navigate("/customer");
+  }
+
   return (
     <Flex
       minH={"70vh"}

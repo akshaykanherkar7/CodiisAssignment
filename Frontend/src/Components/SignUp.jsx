@@ -14,21 +14,49 @@ import {
   Stack,
   Text,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { userRegisterAPI } from "../Redux/Auth/auth.action";
+import { ERROR, REGISTER_SUCC } from "../Redux/Auth/auth.actionTypes";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [payload, setPayload] = useState({});
+  const toast = useToast();
   const HandleOnchange = (e) => {
     let { name, value } = e.target;
     setPayload({ ...payload, [name]: value });
   };
 
+  const dispatch = useDispatch();
+  const { ErrorMsh } = useSelector((state) => state.auth);
+  console.log("ErrorMsh:", ErrorMsh);
+
   const HandleSignup = (e) => {
     e.preventDefault();
     console.log(payload);
+    dispatch(userRegisterAPI(payload)).then( (res) => {
+      if (res === REGISTER_SUCC) {
+         toast({
+          title: "Account created.",
+          description: "We've created your account for you.",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+      if (res === ERROR) {
+         toast({
+          title: ErrorMsh,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    });
   };
   return (
     <Flex
@@ -91,18 +119,19 @@ const SignUp = () => {
                 <FormLabel>Mobile</FormLabel>
                 <Input
                   type="number"
-                  name="mobile"
-                  value={payload.mobile}
+                  name="phone"
+                  value={payload.phone}
                   onChange={HandleOnchange}
                 />
               </FormControl>
               <FormControl id="Designation" isRequired>
                 <FormLabel>Designation</FormLabel>
                 <Select
-                  name="designation"
-                  value={payload.designation}
+                  name="role"
+                  value={payload.role}
                   onChange={HandleOnchange}
                 >
+                  <option value="">Select</option>
                   <option value="Admin">Admin</option>
                   <option value="Customer">Customer</option>
                 </Select>
@@ -110,7 +139,12 @@ const SignUp = () => {
               <FormControl id="password" isRequired>
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
-                  <Input type={showPassword ? "text" : "password"} />
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={payload.password}
+                    onChange={HandleOnchange}
+                  />
                   <InputRightElement h={"full"}>
                     <Button
                       variant={"ghost"}

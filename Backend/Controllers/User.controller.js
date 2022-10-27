@@ -7,7 +7,7 @@ const UserModel = require("../Models/User.model");
 const Userregisterlogger = require("../Middlewares/Userregisterlogger");
 const Userloginlogger = require("../Middlewares/Userloginlogger");
 UserController.post("/register", Userregisterlogger, async (req, res) => {
-  const { fname, lname, username, email, phone, role, password } = req.body;
+  const { fname, lname, email, phone, role, password } = req.body;
 
   // const user = await UserModel.findOne({ email: email, phone: phone });
   // console.log("user:", user);
@@ -22,7 +22,6 @@ UserController.post("/register", Userregisterlogger, async (req, res) => {
       const user = new UserModel({
         fname,
         lname,
-        username,
         email,
         phone,
         role,

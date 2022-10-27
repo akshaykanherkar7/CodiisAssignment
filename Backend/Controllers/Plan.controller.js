@@ -27,23 +27,27 @@ PlanController.get("/:id", async (req, res) => {
 });
 
 PlanController.patch("/:id", async (req, res) => {
-  const updated_plan = await PlanModel.findOneAndUpdate({ _id: id }, req.body, {
-    new: true,
-  });
+  const updated_plan = await PlanModel.findOneAndUpdate(
+    { _id: req.params.id },
+    req.body,
+    {
+      new: true,
+    }
+  );
   return res.status(200).send({
     message: "Plan updated successfully",
-    project: updated_plan,
+    updated_plan: updated_plan,
   });
 });
 
 PlanController.delete("/:id", async (req, res) => {
   const deleted_plan = await PlanModel.findOneAndDelete(
-    { _id: id },
+    { _id: req.params.id },
     { new: true }
   );
   return res.status(200).send({
     message: "Plan deleted successfully",
-    project: deleted_plan,
+    deleted_plan: deleted_plan,
   });
 });
 

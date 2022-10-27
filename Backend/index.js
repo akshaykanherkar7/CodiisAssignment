@@ -10,6 +10,7 @@ const { connection } = require("./Config/config");
 const UserController = require("./Controllers/User.controller");
 const PlanController = require("./Controllers/Plan.controller");
 const BuyedPlanController = require("./Controllers/BuyedPlan.controller");
+const VideoController = require("./Controllers/Video.controller");
 
 app.get("/", async (req, res) => {
   return res.status(200).send("HomePage");
@@ -18,6 +19,7 @@ app.get("/", async (req, res) => {
 app.use("/user", UserController);
 app.use("/plan", PlanController);
 app.use("/buyedplan", BuyedPlanController);
+app.use("/video", VideoController);
 
 app.listen(process.env.PORT, async () => {
   try {
