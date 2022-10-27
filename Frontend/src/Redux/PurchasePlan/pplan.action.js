@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const purchasePlanAPI = (plan) => (dispatch) => {
   return axios
-    .post("http://localhost:8080/buyedplan", plan)
+    .post("https://salty-forest-18051.herokuapp.com/buyedplan", plan)
     .then((res) => {
       return types.PURCHASE_PLAN_SUCC;
     })
@@ -15,7 +15,7 @@ export const purchasePlanAPI = (plan) => (dispatch) => {
 
 export const getPurPlanAPI = () => (dispatch) => {
   return axios
-    .get("http://localhost:8080/buyedplan")
+    .get("https://salty-forest-18051.herokuapp.com/buyedplan")
     .then((res) => {
       dispatch({ type: types.GET_PURCHASED_PLAN, payload: res.data });
     })

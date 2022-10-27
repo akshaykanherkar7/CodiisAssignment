@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const uploadVideoAPI = (payload) => (dispatch) => {
   return axios
-    .post("http://localhost:8080/video", payload)
+    .post("https://salty-forest-18051.herokuapp.com/video", payload)
     .then((res) => {
       return types.UPLOAD_VIDEO_SUCC;
     })
@@ -14,7 +14,7 @@ export const uploadVideoAPI = (payload) => (dispatch) => {
 };
 export const getVideoAPI = () => (dispatch) => {
   return axios
-    .get("http://localhost:8080/video")
+    .get("https://salty-forest-18051.herokuapp.com/video")
     .then((res) => {
       dispatch({ type: types.GET_VIDEO, payload: res.data });
     })
